@@ -11,7 +11,7 @@ class Distance(abc.ABC):
 
 
 class Euclidean(Distance):
-    def calc(self, city_a: np.array, city_b: np.array) -> float:
+    def calc(self, city_a, city_b) -> float:
         return np.linalg.norm(city_a - city_b)
 
 

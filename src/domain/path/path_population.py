@@ -15,6 +15,8 @@ class PathPopulation(Population):
     def init(self, nro_chromosomes=100):
         self.new_population = np.array([
             np.random.permutation(range(len(self.cities))) for _ in list(range(nro_chromosomes))])
+        print(self.new_population[:, 0])
+        self.new_population = np.hstack((self.new_population, np.array([self.new_population[:, 0]]).T))
 
     def get(self, idx) -> np.array:
         return self.new_population[idx]
