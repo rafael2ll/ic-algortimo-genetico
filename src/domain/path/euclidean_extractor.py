@@ -2,6 +2,7 @@ import math
 from typing import List
 
 import numpy as np
+import tsplib95
 
 from ag.parental_extractor import ParentExtractor
 from domain.cities import EuclideanCity
@@ -13,10 +14,10 @@ logger = get_logger(__name__)
 
 
 class EuclideanPathParentExtractor(ParentExtractor):
-    def extract_parent(self, data: List[EuclideanCity], population: np.array) -> List[PathRepresentation]:
+    def extract_parent(self, problem: tsplib95, population: np.array) -> List[PathRepresentation]:
         dist = Euclidean()
         ciclic_pop = np.hstack((population, np.array([population[:, 0]]).T))
-        distances = [sum(dist.calc(data[a], data[b]) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
+        distances = [sum(problem.get_weight(a, b) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
                      ciclic_pop]
 
         logger.debug(f'Distances: {distances}')
@@ -28,9 +29,9 @@ class EuclideanPathParentExtractor(ParentExtractor):
 
 
 # Retorna os indices com menos adaptados
-def natural_select(data: List[EuclideanCity], population: np.array) -> List[int]:
+def natural_select(problem: tsplib95, population: np.array) -> List[int]:
     dist = Euclidean()
-    distances = [sum(dist.calc(data[a], data[b]) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
+    distances = [sum(problem.get_weight(a, b) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
                  population]
     logger.debug(distances)
     lowest1 = max(enumerate(distances), key=lambda d: d[1])[0]
