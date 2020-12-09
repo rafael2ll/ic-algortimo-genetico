@@ -7,6 +7,9 @@ from ag.parental_extractor import ParentExtractor
 from domain.cities import EuclideanCity
 from domain.path.path_representation import PathRepresentation
 from utils.distances import Euclidean
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class EuclideanPathParentExtractor(ParentExtractor):
@@ -16,10 +19,10 @@ class EuclideanPathParentExtractor(ParentExtractor):
         distances = [sum(dist.calc(data[a], data[b]) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
                      ciclic_pop]
 
-        print(f'Distances: {distances}')
+        logger.debug(f'Distances: {distances}')
         parent1 = min(enumerate(distances), key=lambda d: d[1])[0]
         distances[parent1] = math.inf
-        print(f'Distances: {distances}')
+        logger.debug(f'Distances: {distances}')
         parent2 = min(enumerate(distances), key=lambda d: d[1])[0]
         return [population[parent1], population[parent2]]
 
@@ -29,7 +32,7 @@ def natural_select(data: List[EuclideanCity], population: np.array) -> List[int]
     dist = Euclidean()
     distances = [sum(dist.calc(data[a], data[b]) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
                  population]
-    print(distances)
+    logger.debug(distances)
     lowest1 = max(enumerate(distances), key=lambda d: d[1])[0]
     distances[lowest1] = -math.inf
     lowest2 = max(enumerate(distances), key=lambda d: d[1])[0]

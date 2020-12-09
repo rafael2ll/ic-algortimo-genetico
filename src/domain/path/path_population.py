@@ -17,7 +17,6 @@ class PathPopulation(Population):
         self.cities = cities
         self.new_population = np.array([
             np.random.permutation(range(len(self.cities))) for _ in list(range(nro_chromosomes))])
-        print(self.new_population[:, 0])
 
     def get(self, idx) -> np.array:
         return self.new_population[idx]
@@ -26,7 +25,6 @@ class PathPopulation(Population):
         return self.new_population
 
     def add_offspring(self, offspring: np.array):
-        print("offs", offspring)
         self.new_population = np.append(self.new_population, offspring, axis=0)
 
     def natural_selection(self):

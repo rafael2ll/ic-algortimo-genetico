@@ -3,6 +3,9 @@ from typing import Any
 import numpy as np
 
 from ag.mutations import Mutation
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class DMutation(Mutation):
@@ -15,5 +18,5 @@ class DMutation(Mutation):
         cutted = offspring[cuts[0]:cuts[1]]
         one = np.concatenate((offspring[0:cuts[0]], offspring[cuts[1]:]), axis=None)
         insert_point = np.random.randint(0, len(one), size=1)[0]
-        print(f"{cuts}\t {cutted}\t{one}\t{insert_point}")
+        logger.debug(f"{cuts}\t {cutted}\t{one}\t{insert_point}")
         return np.concatenate((one[0:insert_point], cutted, one[insert_point:]), axis=None)
