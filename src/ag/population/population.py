@@ -21,5 +21,8 @@ class Population(ABC):
         pass
 
     @abstractmethod
-    def natural_selection(self):
+    def natural_selection(self, beings=0):
+        pass
+
+    def set_pop(self, pop):
         pass

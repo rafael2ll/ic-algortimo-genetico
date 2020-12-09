@@ -7,7 +7,6 @@ from ag.mutations import Mutation
 from ag.parental_extractor import ParentExtractor
 from ag.population import Population
 from domain.path.euclidean_extractor import EuclideanPathParentExtractor
-from utils.distances import Euclidean
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -50,26 +49,31 @@ class GA:
             logger.debug(f"Parents: {parents}")
             offspring = self._cross_over.cross(parents, offspring_count=offspring_count)
             logger.debug(f"Final Offspring: {offspring}")
-            offspring = self._mutation.apply(offspring)
-            logger.debug(f"Mutated Offspring: {offspring}")
             self._population.add_offspring(offspring)
-            logger.debug(f"Dataset:{self._population.get_pop()}")
-            self._population.natural_selection()
+            self._population.set_pop(self._mutation.apply(self._population.get_pop()))
+            self._population.natural_selection(len(offspring))
             logger.debug(f"Dataset:{self._population.get_pop()}")
             best = np.array(EuclideanPathParentExtractor().extract_parent(problem, population=self.get_pop()))
             ciclic_pop = np.hstack((best, np.array([best[:, 0]]).T))
-            best_distance = \
-                min(enumerate([sum(problem.get_weight(a, b) for a, b in zip(chromosome[0:], chromosome[1:])) for
-                               chromosome in
-                               ciclic_pop]), key=lambda a: a[1])
-            logger.debug(f"Best distance: {best_distance[1]}")
+            best_distance = min(
+                enumerate(
+                    sum(
+                        problem.get_weight(a, b)
+                        for a, b in zip(chromosome[0:], chromosome[1:])
+                    )
+                    for chromosome in ciclic_pop
+                ),
+                key=lambda a: a[1],
+            )
+
+            logger.debug(f"Best distance[{i}]: {best_distance[1]}")
             bests.append(best_distance)
 
-            if len(bests) > 5:
-                if bests[-2][1] == best_distance[1]:
-                    equal_count -= 1
-                    if equal_count == 0:
-                        break
+            if len(bests) > 5 and bests[-2][1] == best_distance[1]:
+                equal_count -= 1
+                if equal_count == 0:
+                    break
             i += 1
         logger.info(f"Summary: {bests}")
         logger.info(f"Best Path [{bests[-1][1]}]:{self.get_pop()[bests[-1][0]]}")
+        return bests[-1][1], self.get_pop()[bests[-1][0]]

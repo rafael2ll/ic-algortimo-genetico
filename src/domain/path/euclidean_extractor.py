@@ -29,15 +29,17 @@ class EuclideanPathParentExtractor(ParentExtractor):
 
 
 # Retorna os indices com menos adaptados
-def natural_select(problem: tsplib95, population: np.array) -> List[int]:
+def natural_select(problem: tsplib95, population: np.array, die=0) -> List[int]:
     dist = Euclidean()
     distances = [sum(problem.get_weight(a, b) for a, b in zip(chromosome[0:], chromosome[1:])) for chromosome in
                  population]
     logger.debug(distances)
-    lowest1 = max(enumerate(distances), key=lambda d: d[1])[0]
-    distances[lowest1] = -math.inf
-    lowest2 = max(enumerate(distances), key=lambda d: d[1])[0]
-    return [lowest1, lowest2]
+    lowest_list = []
+    for d in range(die):
+        lowest = max(enumerate(distances), key=lambda d: d[1])[0]
+        distances[lowest] = -math.inf
+        lowest_list.append(lowest)
+    return lowest_list
 
 
 if __name__ == '__main__':

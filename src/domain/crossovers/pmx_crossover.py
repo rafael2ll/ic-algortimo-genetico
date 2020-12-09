@@ -62,6 +62,7 @@ class PMXCrossOver(CrossOver):
         parent1_cut, parent2_cut = p1[cuts[0]:cuts[1]], p2[cuts[0]:cuts[1]]
         offspring.append(reallocate(p1, parent1_cut, parent2_cut, cuts[0], cuts[1]))
         offspring.append(reallocate(p2, parent2_cut, parent1_cut, cuts[0], cuts[1]))
+
         return np.array(offspring)
 
 
