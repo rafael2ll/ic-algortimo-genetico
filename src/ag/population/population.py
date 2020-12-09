@@ -9,5 +9,17 @@ class Population(ABC):
         pass
 
     @abstractmethod
-    def init(self, nro_chromosomes=100):
+    def get_pop(self) -> array:
+        pass
+
+    @abstractmethod
+    def init(self, data, nro_chromosomes=100):
+        pass
+
+    @abstractmethod
+    def add_offspring(self, offspring):
+        pass
+
+    @abstractmethod
+    def natural_selection(self):
         pass
