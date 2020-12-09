@@ -28,9 +28,12 @@ class PathPopulation(Population):
     def add_offspring(self, offspring: np.array):
         self.new_population = np.append(self.new_population, offspring, axis=0)
 
-    def natural_selection(self):
-        lowest_adaptive: List = natural_select(self.problem, self.new_population)
+    def natural_selection(self, beings=2):
+        lowest_adaptive: List = natural_select(self.problem, self.new_population, beings)
         self.new_population = np.delete(self.new_population, lowest_adaptive, axis=0)
+
+    def set_pop(self, pop):
+        self.new_population = pop
 
 
 if __name__ == '__main__':
