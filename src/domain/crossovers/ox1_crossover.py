@@ -86,7 +86,7 @@ def ox1(first: np.array, second: np.array):
 
 
 class OX1CrossOver(CrossOver):
-    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1) -> List[PathRepresentation]:
+    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1, more=None) -> List[PathRepresentation]:
         first_parent, second_parent = parents[0], parents[1]
         off1, off2 = ox1(first_parent, second_parent)
         return np.array([off1, off2])

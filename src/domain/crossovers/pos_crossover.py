@@ -79,7 +79,7 @@ def pos(first: np.array, second: np.array, maxPos: int):
 
 
 class POSCrossOver(CrossOver):
-    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1) -> List[PathRepresentation]:
+    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1, more=None) -> List[PathRepresentation]:
         first_parent, second_parent = parents[0], parents[1]
         max_count = np.random.randint(low=0, high=len(first_parent), dtype=int)
         off1, off2 = pos(first_parent, second_parent, max_count)

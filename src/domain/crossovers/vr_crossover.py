@@ -8,7 +8,7 @@ from ag.crossovers import CrossOver
 
 
 class VRCrossOver(CrossOver):
-    def cross(self, parents: Any, offspring_count: int = 1) -> Any:
+    def cross(self, parents: Any, offspring_count: int = 1, more=None) -> Any:
         length = len(parents)
         threshold = randrange(1, length + 1)
         already_in = set()

@@ -1,10 +1,9 @@
 from typing import List
 
 import numpy as np
+import tsplib95
+
 from ag.crossovers.crossover import CrossOver
-from domain.cities import EuclideanCity
-from domain.path.euclidean_extractor import EuclideanPathParentExtractor
-from domain.path.path_population import PathPopulation
 from domain.path.path_representation import PathRepresentation
 from utils.logger import get_logger
 
@@ -106,14 +105,18 @@ def er(first, second, edge_map):
 
 
 class ERCrossOver(CrossOver):
-    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1) -> List[PathRepresentation]:
-        # TODO: Get edge map somehow for the current parents
-        edge_map = {1: [2, 6, 3, 5], 2: [1, 3, 4, 6], 3: [2, 4, 1], 4: [3, 5, 2], 5: [4, 6, 1], 6: [1, 5, 2]}
-        first_parent = np.array([1, 2, 3, 4, 5, 6])
-        second_parent = np.array([2, 4, 3, 1, 5, 6])
-        # TODO: end
-        off = er(first_parent, second_parent, edge_map)
-        return np.array(off)
+    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1, more: tsplib95 = None) -> List[
+        PathRepresentation]:
+        edge_map = {}
+        for gene1, gene2 in zip(*parents):
+            if gene1 is not edge_map.keys():
+                edge_map[gene1] = list(map(lambda a: a[1], filter(lambda a: a[0] == gene1, more.get_edges())))
+            if gene2 is not edge_map.keys():
+                edge_map[gene2] = list(map(lambda a: a[1], filter(lambda a: a[0] == gene2, more.get_edges())))
+
+        off = er(parents[0], parents[1], edge_map)
+        print(off)
+        return np.array([off])
 
 
 if __name__ == '__main__':

@@ -57,7 +57,7 @@ def cx(first: np.array, second: np.array):
 
 
 class CXCrossOver(CrossOver):
-    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1) -> List[PathRepresentation]:
+    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1, more=None) -> List[PathRepresentation]:
         first_parent, second_parent = parents[0], parents[1]
         off = cx(first_parent, second_parent)
         return np.array([off])

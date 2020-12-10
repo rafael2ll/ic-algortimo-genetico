@@ -20,7 +20,15 @@ class ISM(Mutation):
         while put_at == get_at:
             put_at = randrange(0, length)
 
-        return np.insert(np.delete(offspring, get_at), offspring[get_at], put_at)
+        logger.debug(f"ISM Init  : {offspring}")
+        v = offspring[get_at]
+        offspring = np.delete(offspring, get_at)
+        if put_at == length - 1:
+            result = np.concatenate((offspring, np.array([v])), axis=None)
+        else:
+            result = np.concatenate((offspring[0:put_at], np.array([v]), offspring[put_at:]), axis=None)
+        logger.debug(f"ISM Mutate: {result}")
+        return result
 
 
 if __name__ == '__main__':

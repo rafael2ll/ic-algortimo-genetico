@@ -21,14 +21,15 @@ def reallocate(parent, original, replacer, cut0, cut1):
     logger.debug(f"initial offspring: {offspring}")
     offspring[cut0:cut1] = replacer
     logger.debug(f"replace offspring: {offspring}")
-    offspring[0:cut0] = [parent[i] if parent[i] not in replacer else int(resolve(parent[i], original, replacer))
-                         for i in
-                         range(0, cut0)]
+    offspring[0:cut0] = [
+        parent[i] if parent[i] not in replacer else int(resolve(parent[i], offspring, original, replacer))
+        for i in
+        range(0, cut0)]
     logger.debug(f"first side offspring: {offspring}")
     for i in range(cut1, len(parent)):
         if parent[i] in replacer:
             logger.debug(f"[{i}]Resolving conflict: ")
-            v = resolve(parent[i], original, replacer)
+            v = resolve(parent[i], offspring, original, replacer)
             logger.debug(f"Conflict resolved: {v}")
         else:
             logger.debug(f"[{i}]No conflict found")
@@ -40,20 +41,28 @@ def reallocate(parent, original, replacer, cut0, cut1):
     return offspring
 
 
-def resolve(v, original: np.array, replacer: np.array):
+def resolve(v, offspring, original: np.array, replacer: np.array):
     logger.debug(f"v:{v}\to:{original}, r:{replacer}")
     idx = np.where(replacer == v)[0][0]
     logger.debug(f"Position  of {v}: {idx}")
     new_v = original[idx]
-    if new_v not in replacer:
-        logger.debug(f"Assuming {v} as {new_v}")
-        return new_v
-    else:
-        return resolve(original[idx], original, replacer)
+    count = 0
+    while True:
+        logger.debug(f"While...{new_v}")
+        if new_v not in replacer:
+            logger.debug(f"Assuming {v} as {new_v}")
+            break
+        else:
+            idx = np.where(replacer == new_v)[0][0]
+            new_v = original[idx]
+            count += 1
+        if count == 50:
+            return [a for a in original if a not in offspring][0]
+    return new_v
 
 
 class PMXCrossOver(CrossOver):
-    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1) -> List[PathRepresentation]:
+    def cross(self, parents: List[PathRepresentation], offspring_count: int = 1, more=None) -> List[PathRepresentation]:
         p1, p2 = parents[0], parents[1]
         offspring = []
         gene_count = len(p1)

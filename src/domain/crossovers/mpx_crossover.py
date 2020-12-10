@@ -8,7 +8,7 @@ from ag.crossovers import CrossOver
 
 class MPXCrossOver(CrossOver):
 
-    def cross(self, parents: Any, offspring_count: int = 1) -> Any:
+    def cross(self, parents: Any, offspring_count: int = 1, more=None) -> Any:
         p1 = parents[0]
         p2 = parents[1]
         length = len(p1)

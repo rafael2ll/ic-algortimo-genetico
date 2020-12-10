@@ -7,7 +7,7 @@ from ag.crossovers import CrossOver
 
 class APCrossOver(CrossOver):
 
-    def cross(self, parents: Any, offspring_count: int = 1) -> Any:
+    def cross(self, parents: Any, offspring_count: int = 1, more=None) -> Any:
         offspring = []
         already_in = set()
         for values in zip(*parents):

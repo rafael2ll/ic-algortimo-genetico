@@ -47,7 +47,7 @@ class GA:
         while i < iterations:
             parents = self._parent_extractor.extract_parent(problem, self._population.get_pop())
             logger.debug(f"Parents: {parents}")
-            offspring = self._cross_over.cross(parents, offspring_count=offspring_count)
+            offspring = self._cross_over.cross(parents, offspring_count=offspring_count, more=problem)
             logger.debug(f"Final Offspring: {offspring}")
             self._population.add_offspring(offspring)
             self._population.set_pop(self._mutation.apply(self._population.get_pop()))
